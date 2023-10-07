@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "focus.ai.v2",
+  "version": "1.0.0",
+  "description": "If you love your work but hate distractions, use focus.ai to boost your productivity. This Chrome extension takes focus to the next level.",
+  "author": "Sayantan Chowdhury",
+  "permissions": ["storage"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content_script.js"]
+    }
+  ],
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Focus.ai"
+  }
+}
