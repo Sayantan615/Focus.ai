@@ -123,37 +123,38 @@ function Dashboard() {
         <div className="time_switcher">
           <div className="timer_container">
             <h1>Pomodoro</h1>
-            <Timer time={1500} />
+            <Timer id={101} time={1500} />
           </div>
           <div className="timer_container">
             <h1>Short Break</h1>
-            <Timer time={300} />
+            <Timer id={102} time={300} />
           </div>
           <div className="timer_container">
             <h1>Long Break</h1>
-            <Timer time={900} />
+            <Timer id={103} time={900} />
           </div>
         </div>
-        {addTaskButtonState ? (
-          <div className="add_task_container">
-            <AddTask onSignal={insertTask} />
-            <button className="cancel_button" onClick={closeAddTaskContainer}>
-              <i className="fa-solid fa-xmark"></i>
-            </button>
-          </div>
-        ) : (
-          <div className="add_task_button_container">
-            <button
-              className="add_task_btn"
-              onClick={() => {
-                setaddTaskButtonState(true);
-              }}
-            >
-              Add Task
-            </button>
-          </div>
-        )}
+
         <div className="task_section">
+          {addTaskButtonState ? (
+            <div className="add_task_container">
+              <AddTask onSignal={insertTask} />
+              <button className="cancel_button" onClick={closeAddTaskContainer}>
+                <i className="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+          ) : (
+            <div className="add_task_button_container">
+              <button
+                className="add_task_btn"
+                onClick={() => {
+                  setaddTaskButtonState(true);
+                }}
+              >
+                Add Task
+              </button>
+            </div>
+          )}
           <h1>Priority Tasks</h1>
           <div className="task_container">
             {taskList &&

@@ -3,23 +3,25 @@ import "./App.css";
 
 const Timer = (props) => {
   const [totalSeconds, setTotalSeconds] = useState(props.time);
-  const [isActive, setIsActive] = useState(false);
+  const [id, setId] = useState();
   useEffect(() => {
     setTotalSeconds(props.time);
-  }, [props.time]);
+    setId(props.id);
+  }, [props.time, props.id]);
+
   useEffect(() => {
-    let interval;
-
-    if (isActive) {
-      interval = setInterval(() => {
-        setTotalSeconds((prevTotalSeconds) => prevTotalSeconds - 1);
-      }, 1000);
-    } else if (!isActive && totalSeconds !== 0) {
-      clearInterval(interval);
-    }
-
-    return () => clearInterval(interval);
-  }, [isActive, totalSeconds]);
+    const messageListener = (message, sender, sendResponse) => {
+      if (message.action === "updateTimer") {
+        if (message.id == id) {
+          setTotalSeconds(message.time);
+        }
+      }
+    };
+    chrome.runtime.onMessage.addListener(messageListener);
+    return () => {
+      chrome.runtime.onMessage.removeListener(messageListener);
+    };
+  }, [id]);
 
   const formatTime = (seconds) => {
     const minutes = Math.floor((seconds % 3600) / 60);
@@ -31,16 +33,27 @@ const Timer = (props) => {
   };
 
   const startTimer = () => {
-    setIsActive(true);
+    chrome.runtime.sendMessage(
+      {
+        action: "start",
+        time: totalSeconds,
+        id: id,
+      },
+      (response) => {
+        if (chrome.runtime.lastError) {
+          console.error(chrome.runtime.lastError.message);
+        }
+      }
+    );
   };
 
   const stopTimer = () => {
-    setIsActive(false);
+    chrome.runtime.sendMessage({ action: "stop" });
   };
 
   const resetTimer = () => {
-    setIsActive(false);
-    setTotalSeconds(1500);
+    chrome.runtime.sendMessage({ action: "reset" });
+    setTotalSeconds(props.time);
   };
 
   return (
