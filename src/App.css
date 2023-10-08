@@ -132,9 +132,11 @@ h1 {
 }
 .task p {
   flex-grow: 1 !important;
+  cursor: zoom-in;
 }
 .task_btn_container {
   align-items: center;
+  gap: 5px;
 }
 .btn {
   display: flex;
@@ -151,7 +153,7 @@ h1 {
 .closed_task {
   justify-content: space-between;
 }
-.Navbar {
+/* .Navbar {
   margin: 0.5rem 1rem;
   display: flex;
   gap: 2rem;
@@ -166,7 +168,7 @@ h1 {
 
 .Navbar a:hover {
   text-decoration: underline;
-}
+} */
 
 .clear_btn {
   padding: 10px;

@@ -28,7 +28,11 @@ const updateTaskList = (callback) => {
 
 function Dashboard() {
   const [taskList, setTaskList] = useState([
-    { title: "Be more productive", description: "This is a dummy task" },
+    {
+      title: "Be more productive",
+      description: "This is a dummy task",
+      promo: { total: 0, done: 0, remaining: 0 },
+    },
   ]);
   useEffect(() => {
     updateTaskList((data) => {
@@ -92,17 +96,22 @@ function Dashboard() {
     }
   };
   const deleteItem = (index) => {
-    let temptaskList = [...taskList];
-    let newTaskList = [];
-    if (temptaskList.length === 1) {
-      newTaskList = [{ title: "Be More Productive", description: "" }];
+    const confirmation = window.confirm("Do you want to delete the task?");
+
+    // Check if the user confirmed the deletion
+    if (confirmation) {
+      let temptaskList = [...taskList];
+      let newTaskList = [];
+      if (temptaskList.length === 1) {
+        newTaskList = [{ title: "Be More Productive", description: "" }];
+      }
+      temptaskList.forEach((task, i) => {
+        if (index !== i) newTaskList.push(task);
+      });
+      const updatedTaskList = newTaskList;
+      setTaskList(updatedTaskList);
+      localStoragePush(updatedTaskList);
     }
-    temptaskList.forEach((task, i) => {
-      if (index !== i) newTaskList.push(task);
-    });
-    const updatedTaskList = newTaskList;
-    setTaskList(updatedTaskList);
-    localStoragePush(updatedTaskList);
   };
   const handleTaskView = (index) => {
     // Toggle the expanded task index
@@ -127,7 +136,7 @@ function Dashboard() {
           </div>
           <div className="timer_container">
             <h1>Short Break</h1>
-            <Timer id={102} time={300} />
+            <Timer id={102} time={60} />
           </div>
           <div className="timer_container">
             <h1>Long Break</h1>
@@ -160,24 +169,36 @@ function Dashboard() {
             {taskList &&
               taskList.map((tasks, index) => (
                 <div className="task" key={index}>
-                  <div className="flex closed_task">
-                    <p onClick={() => handleTaskView(index)}>{tasks.title}</p>
+                  <div
+                    className="flex closed_task"
+                    onClick={(e) => handleTaskView(index, e)}
+                  >
+                    <p>{tasks.title.substring(0, 20)+" ..."}</p>
                     <div className="flex task_btn_container">
                       <div
                         className="btn move-up"
-                        onClick={() => moveUp(index)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          moveUp(index);
+                        }}
                       >
                         <i className="fa-solid fa-arrow-up"></i>
                       </div>
                       <div
                         className="btn move-down"
-                        onClick={() => moveDown(index)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          moveDown(index);
+                        }}
                       >
                         <i className="fa-solid fa-arrow-down"></i>
                       </div>
                       <div
                         className="btn move-up"
-                        onClick={() => deleteItem(index)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          deleteItem(index);
+                        }}
                       >
                         <i className="fa-solid fa-xmark"></i>
                       </div>

@@ -16,6 +16,7 @@ const Timer = (props) => {
           setTotalSeconds(message.time);
         }
       }
+      return Promise.resolve("Response to keep the console quiet");
     };
     chrome.runtime.onMessage.addListener(messageListener);
     return () => {
@@ -33,18 +34,11 @@ const Timer = (props) => {
   };
 
   const startTimer = () => {
-    chrome.runtime.sendMessage(
-      {
-        action: "start",
-        time: totalSeconds,
-        id: id,
-      },
-      (response) => {
-        if (chrome.runtime.lastError) {
-          console.error(chrome.runtime.lastError.message);
-        }
-      }
-    );
+    chrome.runtime.sendMessage({
+      action: "start",
+      time: totalSeconds,
+      id: id,
+    });
   };
 
   const stopTimer = () => {
