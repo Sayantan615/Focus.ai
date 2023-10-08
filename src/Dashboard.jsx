@@ -162,7 +162,7 @@ function Dashboard() {
                 <div className="task" key={index}>
                   <div className="flex closed_task">
                     <p onClick={() => handleTaskView(index)}>{tasks.title}</p>
-                    <div className="flex">
+                    <div className="flex task_btn_container">
                       <div
                         className="btn move-up"
                         onClick={() => moveUp(index)}
@@ -175,12 +175,12 @@ function Dashboard() {
                       >
                         <i className="fa-solid fa-arrow-down"></i>
                       </div>
-                    </div>
-                    <div
-                      className="btn move-up"
-                      onClick={() => deleteItem(index)}
-                    >
-                      <i className="fa-solid fa-xmark"></i>
+                      <div
+                        className="btn move-up"
+                        onClick={() => deleteItem(index)}
+                      >
+                        <i className="fa-solid fa-xmark"></i>
+                      </div>
                     </div>
                   </div>
                   {/* Render the big view content here */}
@@ -194,9 +194,9 @@ function Dashboard() {
                 </div>
               ))}
           </div>
-          <button className="clear_btn" onClick={handleClearHistory}>
+          {/* <button className="clear_btn" onClick={handleClearHistory}>
             Clear History
-          </button>
+          </button> */}
         </div>
       </div>
     </>
