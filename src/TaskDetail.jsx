@@ -38,7 +38,7 @@ function TaskDetail(props) {
         onChange={(e) => setTempDescription(e.target.value)}
         placeholder="Task Description Empty"
       />
-      <div className="flex">
+      <div className="flex taskDetail_btn_container">
         <button onClick={sendDatatoDashboard}>save</button>
         <button onClick={cancelUpdate}>cancel</button>
       </div>

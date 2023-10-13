@@ -42,7 +42,6 @@ function Dashboard() {
   const [expandedTaskIndex, setExpandedTaskIndex] = useState();
   const [addTaskButtonState, setaddTaskButtonState] = useState(false);
   const insertTask = (data) => {
-    // Check if 'task' is empty
     if (data.title.length !== 0) {
       setaddTaskButtonState(false);
       let newtask = data.title;
@@ -136,15 +135,17 @@ function Dashboard() {
           </div>
           <div className="timer_container">
             <h1>Short Break</h1>
-            <Timer id={102} time={60} />
+            <Timer id={102} time={300} />
           </div>
           <div className="timer_container">
             <h1>Long Break</h1>
-            <Timer id={103} time={900} />
+            <Timer id={103} time={10} />
           </div>
         </div>
 
         <div className="task_section">
+          {/* add block list funcationality same logic as addTaskButton but it's position will be absolute */}
+          {/* add block list funcationality */}
           {addTaskButtonState ? (
             <div className="add_task_container">
               <AddTask onSignal={insertTask} />
@@ -165,6 +166,7 @@ function Dashboard() {
             </div>
           )}
           <h1>Priority Tasks</h1>
+          <hr style={{ background: "black", height: "1px", width: "90%" }} />
           <div className="task_container">
             {taskList &&
               taskList.map((tasks, index) => (
@@ -173,7 +175,7 @@ function Dashboard() {
                     className="flex closed_task"
                     onClick={(e) => handleTaskView(index, e)}
                   >
-                    <p>{tasks.title.substring(0, 20)+" ..."}</p>
+                    <p>{tasks.title.substring(0, 20) + "..."}</p>
                     <div className="flex task_btn_container">
                       <div
                         className="btn move-up"

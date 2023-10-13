@@ -4,7 +4,24 @@
   "version": "1.0.0",
   "description": "If you love your work but hate distractions, use focus.ai to boost your productivity. This Chrome extension takes focus to the next level.",
   "author": "Sayantan Chowdhury",
-  "permissions": ["storage"],
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "ruleset_1",
+        "enabled": false,
+        "path": "ruleset_1.json"
+      }
+    ]
+  },
+  "permissions": [
+    "tabs",
+    "activeTab",
+    "storage",
+    "notifications",
+    "declarativeNetRequest",
+    "declarativeNetRequestFeedback"
+  ],
+  "host_permissions": ["<all_urls>"],
   "background": {
     "service_worker": "background.js"
   },

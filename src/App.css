@@ -4,7 +4,7 @@ body {
   margin: 0px;
   box-sizing: border-box;
   height: max-content;
-  background: aquamarine;
+  background: tomato;
 }
 h1 {
   margin: 2px;
@@ -18,7 +18,7 @@ h1 {
 
 .container {
   width: max-content;
-  background-color: aquamarine;
+  background-color: tomato;
   display: flex;
   flex-direction: row;
   align-items: self-start;
@@ -52,7 +52,6 @@ h1 {
 .task_container {
   border-radius: 10px;
   overflow-y: scroll;
-  margin-top: 1rem;
   scroll-behavior: smooth;
   width: max-content;
   padding: 0.5rem;
@@ -132,7 +131,7 @@ h1 {
 }
 .task p {
   flex-grow: 1 !important;
-  cursor: zoom-in;
+  cursor: pointer;
 }
 .task_btn_container {
   align-items: center;
@@ -195,8 +194,10 @@ h1 {
 .btn_container .btn {
   padding: 5px;
   border-radius: 10px;
-  background: black;
-  color: white;
+  background: white;
+  color: black;
+  border: 2px solid black;
+  box-shadow: 2px 2px tomato;
 }
 
 .timer_container {

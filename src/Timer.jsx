@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 
+
 const Timer = (props) => {
   const [totalSeconds, setTotalSeconds] = useState(props.time);
   const [id, setId] = useState();
@@ -10,9 +11,9 @@ const Timer = (props) => {
   }, [props.time, props.id]);
 
   useEffect(() => {
-    const messageListener = (message, sender, sendResponse) => {
+    const messageListener = (message) => {
       if (message.action === "updateTimer") {
-        if (message.id == id) {
+        if (message.id === id) {
           setTotalSeconds(message.time);
         }
       }
@@ -41,8 +42,9 @@ const Timer = (props) => {
     });
   };
 
-  const stopTimer = () => {
-    chrome.runtime.sendMessage({ action: "stop" });
+  const stopTimer = async () => {
+    await chrome.runtime.sendMessage({ action: "stop" });
+    alert("If you close the extension then timer will be reset");
   };
 
   const resetTimer = () => {
