@@ -41,9 +41,12 @@ function Dashboard() {
   }, []);
   const [expandedTaskIndex, setExpandedTaskIndex] = useState();
   const [addTaskButtonState, setaddTaskButtonState] = useState(false);
+  const [sortState, setSortState] = useState(false);
+  const [isMenuActive, setIsMenuActive] = useState(false);
   const insertTask = (data) => {
     if (data.title.length !== 0) {
       setaddTaskButtonState(false);
+      setaddTaskButtonState(true);
       let newtask = data.title;
       let newtaskdescription = data.description;
       const updatedTaskList = [
@@ -165,8 +168,46 @@ function Dashboard() {
               </button>
             </div>
           )}
-          <h1>Priority Tasks</h1>
+          <div className="top_container">
+            <h1 className="top_container_heading">Priority Tasks</h1>
+            <a
+              onClick={() => {
+                setIsMenuActive(!isMenuActive);
+              }}
+              className="toggle_menu_button"
+            >
+              {!isMenuActive ? (
+                <i className="fa-solid fa-bars"></i>
+              ) : (
+                <i className="fa-solid fa-xmark"></i>
+              )}
+            </a>
+          </div>
           <hr style={{ background: "black", height: "1px", width: "90%" }} />
+          {isMenuActive ? (
+            <div className="toggleMenu">
+              <div
+                className="menu-option"
+                onClick={() => {
+                  setIsMenuActive(false);
+                  setSortState(!sortState);
+                }}
+              >
+                Rearange
+              </div>
+              <div
+                className="menu-option"
+                onClick={() => {
+                  handleClearHistory;
+                  setIsMenuActive(false);
+                }}
+              >
+                Clear all
+              </div>
+            </div>
+          ) : (
+            <></>
+          )}
           <div className="task_container">
             {taskList &&
               taskList.map((tasks, index) => (
@@ -177,24 +218,28 @@ function Dashboard() {
                   >
                     <p>{tasks.title.substring(0, 20) + "..."}</p>
                     <div className="flex task_btn_container">
-                      <div
-                        className="btn move-up"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          moveUp(index);
-                        }}
-                      >
-                        <i className="fa-solid fa-arrow-up"></i>
-                      </div>
-                      <div
-                        className="btn move-down"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          moveDown(index);
-                        }}
-                      >
-                        <i className="fa-solid fa-arrow-down"></i>
-                      </div>
+                      {sortState ? (
+                        <>
+                          <div
+                            className="btn move-up"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              moveUp(index);
+                            }}
+                          >
+                            <i className="fa-solid fa-arrow-up"></i>
+                          </div>
+                          <div
+                            className="btn move-down"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              moveDown(index);
+                            }}
+                          >
+                            <i className="fa-solid fa-arrow-down"></i>
+                          </div>
+                        </>
+                      ) : null}
                       <div
                         className="btn move-up"
                         onClick={(e) => {

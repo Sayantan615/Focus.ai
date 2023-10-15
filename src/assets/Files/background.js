@@ -82,7 +82,6 @@ const startTimer = async () => {
         if (id == 102) {
           sendNotification("Break Over", "Break ended get back to work.", true);
         } else if (id == 101) {
-          clear();
           sendNotification("25 minutes over", "well done!", true);
         } else if (id == 103) {
           sendNotification(
@@ -121,6 +120,7 @@ chrome.runtime.onMessage.addListener(async (message) => {
       startTimer();
     }
   } else if (message.action === "stop") {
+    sendNotification("Timer stopped", "Closing the extension will reset the timer", false);
     stopTimer();
     if (isBlocked) {
       unBlockSites();

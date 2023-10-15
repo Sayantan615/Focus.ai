@@ -44,7 +44,6 @@ const Timer = (props) => {
 
   const stopTimer = async () => {
     await chrome.runtime.sendMessage({ action: "stop" });
-    alert("If you close the extension then timer will be reset");
   };
 
   const resetTimer = () => {
