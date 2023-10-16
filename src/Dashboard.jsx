@@ -6,7 +6,6 @@ import AddTask from "./AddTask";
 const localStoragePush = (data) => {
   chrome.storage.sync.set({ data }, () => {
     console.log(`Data is Saved ${data}`);
-    console.log(data);
   });
 };
 const updateTaskList = (callback) => {
@@ -32,8 +31,21 @@ function Dashboard() {
       title: "Be more productive",
       description: "This is a dummy task",
       promo: { total: 0, done: 0, remaining: 0 },
+      status: false,
     },
   ]);
+  const sortSaveandUpdateTaskList = () => {
+    const sortedTaskList = [...taskList]; // Create a copy of the original array
+    sortedTaskList.sort((a, b) =>
+      a.status === b.status ? 0 : a.status ? 1 : -1
+    );
+    // The sorting function ensures 'false' status tasks appear first
+    setTaskList(sortedTaskList);
+    localStoragePush(sortedTaskList);
+    updateTaskList((data) => {
+      setTaskList([...data]);
+    });
+  };
   useEffect(() => {
     updateTaskList((data) => {
       setTaskList([...data]);
@@ -50,8 +62,13 @@ function Dashboard() {
       let newtask = data.title;
       let newtaskdescription = data.description;
       const updatedTaskList = [
+        {
+          title: newtask,
+          description: newtaskdescription,
+          promo: { total: 0, done: 0, remaining: 0 },
+          status: false,
+        },
         ...taskList,
-        { title: newtask, description: newtaskdescription },
       ];
       setTaskList(updatedTaskList);
       localStoragePush(updatedTaskList);
@@ -61,8 +78,6 @@ function Dashboard() {
     }
   };
   const handleChildSignal = (data) => {
-    // Do something with the data received from the child
-    console.log("Data received from child:", data);
     let index = expandedTaskIndex;
     setExpandedTaskIndex(null);
     taskList[index].title = data.title;
@@ -71,9 +86,12 @@ function Dashboard() {
     localStoragePush(newTaskList);
   };
   const handleClearHistory = () => {
-    let newTaskList = [{ title: "Be More Productive", description: "" }];
-    localStoragePush(newTaskList);
+    let newTaskList = [
+      { title: "Be More Productive", description: "", status: false },
+    ];
     setTaskList(newTaskList);
+    localStoragePush(newTaskList);
+    console.log(newTaskList);
   };
   const moveUp = (index) => {
     if (index > 0) {
@@ -118,18 +136,24 @@ function Dashboard() {
   const handleTaskView = (index) => {
     // Toggle the expanded task index
     if (expandedTaskIndex === index) {
-      setExpandedTaskIndex(null); // Collapse the task if it's already expanded
+      setExpandedTaskIndex(null);
     } else {
-      setExpandedTaskIndex(index); // Expand the clicked task
+      setExpandedTaskIndex(index);
     }
   };
   const closeAddTaskContainer = () => {
     setaddTaskButtonState(false);
   };
+
+  const changeStatus = (index) => {
+    taskList[index].status = !taskList[index].status;
+    const newTaskList = taskList;
+    setTaskList(newTaskList);
+    sortSaveandUpdateTaskList();
+  };
   return (
     <>
       <div className="container">
-        {/* Pomodoro timer will go here */}
         {/* Timer */}
         <div className="time_switcher">
           <div className="timer_container">
@@ -142,11 +166,18 @@ function Dashboard() {
           </div>
           <div className="timer_container">
             <h1>Long Break</h1>
-            <Timer id={103} time={10} />
+            <Timer id={103} time={900} />
           </div>
         </div>
 
-        <div className="task_section">
+        <div
+          className="task_section"
+          onKeyDown={(e) => {
+            if (e.key === "Escape") {
+              closeAddTaskContainer();
+            }
+          }}
+        >
           {/* add block list funcationality same logic as addTaskButton but it's position will be absolute */}
           {/* add block list funcationality */}
           {addTaskButtonState ? (
@@ -182,41 +213,66 @@ function Dashboard() {
                 <i className="fa-solid fa-xmark"></i>
               )}
             </a>
+            {isMenuActive ? (
+              <div className="toggleMenu">
+                <div
+                  className="menu-option"
+                  onClick={() => {
+                    setIsMenuActive(false);
+                    setSortState(!sortState);
+                  }}
+                >
+                  Rearange
+                </div>
+                <div
+                  className="menu-option"
+                  onClick={() => {
+                    handleClearHistory();
+                    setIsMenuActive(false);
+                  }}
+                >
+                  Clear all
+                </div>
+              </div>
+            ) : (
+              <></>
+            )}
           </div>
           <hr style={{ background: "black", height: "1px", width: "90%" }} />
-          {isMenuActive ? (
-            <div className="toggleMenu">
-              <div
-                className="menu-option"
-                onClick={() => {
-                  setIsMenuActive(false);
-                  setSortState(!sortState);
-                }}
-              >
-                Rearange
-              </div>
-              <div
-                className="menu-option"
-                onClick={() => {
-                  handleClearHistory;
-                  setIsMenuActive(false);
-                }}
-              >
-                Clear all
-              </div>
-            </div>
-          ) : (
-            <></>
-          )}
           <div className="task_container">
             {taskList &&
               taskList.map((tasks, index) => (
                 <div className="task" key={index}>
                   <div
                     className="flex closed_task"
-                    onClick={(e) => handleTaskView(index, e)}
+                    onClick={(e) => {
+                      handleTaskView(index, e);
+                    }}
                   >
-                    <p>{tasks.title.substring(0, 20) + "..."}</p>
+                    <div
+                      className="flex task_btn_container"
+                      style={{ marginRight: "1rem" }}
+                    >
+                      <a
+                        className="btn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          changeStatus(index);
+                        }}
+                      >
+                        <i className="fa-solid fa-check"></i>
+                      </a>
+                    </div>
+                    <p
+                      className={
+                        tasks.status && tasks.status === true
+                          ? "linethrough"
+                          : ""
+                      }
+                    >
+                      {tasks.title.substring(0, 20)}
+                      {tasks.title.length > 20 ? "..." : ""}
+                    </p>
                     <div className="flex task_btn_container">
                       {sortState ? (
                         <>

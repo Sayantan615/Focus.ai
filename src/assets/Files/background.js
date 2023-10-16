@@ -34,7 +34,6 @@ const unBlockSites = async () => {
 const reloadPages = () => {
   chrome.tabs.query({}, (tabs) => {
     tabs.forEach((tab) => {
-      // Check if the tab's URL matches any of the blockUrls
       if (
         blockUrls.some((urlPattern) => new RegExp(urlPattern).test(tab.url))
       ) {
@@ -43,7 +42,13 @@ const reloadPages = () => {
     });
   });
 };
+// function audioNotification() {
+//   var yourSound = new Audio("yourSound.mp3");
+//   yourSound.play();
+// }
 const sendNotification = (title, message, requireInteraction) => {
+  // Add Sound when a custome notification is send
+  // audioNotification();
   chrome.notifications.create({
     type: "basic",
     iconUrl: "icon.png",
@@ -120,7 +125,11 @@ chrome.runtime.onMessage.addListener(async (message) => {
       startTimer();
     }
   } else if (message.action === "stop") {
-    sendNotification("Timer stopped", "Closing the extension will reset the timer", false);
+    sendNotification(
+      "Timer stopped",
+      "Closing the extension will reset the timer",
+      false
+    );
     stopTimer();
     if (isBlocked) {
       unBlockSites();

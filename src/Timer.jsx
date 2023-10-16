@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 
-
 const Timer = (props) => {
   const [totalSeconds, setTotalSeconds] = useState(props.time);
   const [id, setId] = useState();
@@ -56,13 +55,13 @@ const Timer = (props) => {
       <h1 className="timer">{formatTime(totalSeconds)}</h1>
       <div className="btn_container">
         <button className="btn" onClick={startTimer}>
-          Start
+          <i className="fa-solid fa-play"></i>
         </button>
         <button className="btn" onClick={stopTimer}>
-          Stop
+          <i className="fa-solid fa-pause"></i>
         </button>
         <button className="btn" onClick={resetTimer}>
-          Reset
+          <i className="fa-solid fa-repeat"></i>
         </button>
       </div>
     </>
