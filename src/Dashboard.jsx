@@ -172,11 +172,6 @@ function Dashboard() {
 
         <div
           className="task_section"
-          onKeyDown={(e) => {
-            if (e.key === "Escape") {
-              closeAddTaskContainer();
-            }
-          }}
         >
           {/* add block list funcationality same logic as addTaskButton but it's position will be absolute */}
           {/* add block list funcationality */}
@@ -251,7 +246,7 @@ function Dashboard() {
                   >
                     <div
                       className="flex task_btn_container"
-                      style={{ marginRight: "1rem" }}
+                      style={{ marginRight: "0.5rem" }}
                     >
                       <a
                         className="btn"

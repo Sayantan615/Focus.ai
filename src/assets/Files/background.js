@@ -89,11 +89,7 @@ const startTimer = async () => {
         } else if (id == 101) {
           sendNotification("25 minutes over", "well done!", true);
         } else if (id == 103) {
-          sendNotification(
-            "Break Over",
-            "Get back to work after the refreshment",
-            true
-          );
+          sendNotification("Break Over", "Get back to work.", true);
         }
       }
     }, 1000);
@@ -112,37 +108,45 @@ const resetTimer = () => {
 };
 
 chrome.runtime.onMessage.addListener(async (message) => {
-  if (message.action === "start") {
-    totalSeconds = message.time;
-    savetotalSeconds = message.time;
-    id = message.id;
-    if (!isActive) {
-      if (id === 101) {
-        isBlocked = true;
-        BlockSites();
-        reloadPages();
+  if (!isActive) {
+    if (message.action === "start") {
+      totalSeconds = message.time;
+      savetotalSeconds = message.time;
+      id = message.id;
+      if (!isActive) {
+        if (id === 101) {
+          isBlocked = true;
+          BlockSites();
+          reloadPages();
+        }
+        startTimer();
       }
-      startTimer();
+    } else if (message.action === "stop") {
+      sendNotification(
+        "Timer stopped",
+        "Closing the extension will reset the timer",
+        false
+      );
+      stopTimer();
+      if (isBlocked) {
+        unBlockSites();
+        reloadPages();
+        isBlocked = false;
+      }
+    } else if (message.action === "reset") {
+      resetTimer();
+      if (isBlocked) {
+        unBlockSites();
+        reloadPages();
+        isBlocked = false;
+      }
     }
-  } else if (message.action === "stop") {
+  } else {
     sendNotification(
-      "Timer stopped",
-      "Closing the extension will reset the timer",
+      "Already a Timer is running",
+      "Please wait for Timer to finish or stop the Timer",
       false
     );
-    stopTimer();
-    if (isBlocked) {
-      unBlockSites();
-      reloadPages();
-      isBlocked = false;
-    }
-  } else if (message.action === "reset") {
-    resetTimer();
-    if (isBlocked) {
-      unBlockSites();
-      reloadPages();
-      isBlocked = false;
-    }
   }
   return Promise.resolve("Response to keep the console quiet");
 });

@@ -176,7 +176,11 @@ h1 {
   gap: 1rem;
 }
 .btn_container .btn {
-  padding: 5px;
+  width: 1.7rem;
+  height: 1.7rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: 50%;
   color: white;
   background: black;
