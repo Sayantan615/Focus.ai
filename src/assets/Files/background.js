@@ -1,3 +1,26 @@
+// After First Install
+const data = [
+  {
+    title: "Welcome!",
+    description: "",
+    promo: { total: 0, done: 0, remaining: 0 },
+    status: false,
+  },
+  {
+    title: "Be Productive!",
+    description: "",
+    promo: { total: 0, done: 0, remaining: 0 },
+    status: false,
+  },
+];
+chrome.runtime.onInstalled.addListener(function (details) {
+  // Check the reason for the event
+  if (details.reason === "install") {
+    chrome.storage.sync.set({ data }, () => {});
+  }
+});
+
+// Timer Logic
 let totalSeconds = 0;
 let savetotalSeconds = 0;
 let isActive = false;

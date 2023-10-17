@@ -5,21 +5,21 @@ import Timer from "./Timer";
 import AddTask from "./AddTask";
 const localStoragePush = (data) => {
   chrome.storage.sync.set({ data }, () => {
-    console.log(`Data is Saved ${data}`);
+    console.log(`Data is Saved`);
   });
 };
 const updateTaskList = (callback) => {
   chrome.storage.sync.get(["data"], (res) => {
     if (chrome.runtime.lastError) {
       console.error(chrome.runtime.lastError);
-      callback([]); // Return an empty array in case of an error.
+      callback([]);
     } else {
       const retrievedData = res["data"];
       console.log(retrievedData);
       if (retrievedData) {
-        callback(retrievedData); // Only callback if retrievedData is an array.
+        callback(retrievedData);
       } else {
-        callback([]); // Return an empty array if retrievedData is not an array.
+        callback([]);
       }
     }
   });
@@ -35,11 +35,10 @@ function Dashboard() {
     },
   ]);
   const sortSaveandUpdateTaskList = () => {
-    const sortedTaskList = [...taskList]; // Create a copy of the original array
+    const sortedTaskList = [...taskList]; 
     sortedTaskList.sort((a, b) =>
       a.status === b.status ? 0 : a.status ? 1 : -1
     );
-    // The sorting function ensures 'false' status tasks appear first
     setTaskList(sortedTaskList);
     localStoragePush(sortedTaskList);
     updateTaskList((data) => {
@@ -170,11 +169,7 @@ function Dashboard() {
           </div>
         </div>
 
-        <div
-          className="task_section"
-        >
-          {/* add block list funcationality same logic as addTaskButton but it's position will be absolute */}
-          {/* add block list funcationality */}
+        <div className="task_section">
           {addTaskButtonState ? (
             <div className="add_task_container">
               <AddTask onSignal={insertTask} />
@@ -313,9 +308,6 @@ function Dashboard() {
                 </div>
               ))}
           </div>
-          {/* <button className="clear_btn" onClick={handleClearHistory}>
-            Clear History
-          </button> */}
         </div>
       </div>
     </>
