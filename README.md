@@ -12,7 +12,13 @@ $ npm install
 $ npm run build
 # This will create a 'dist' directory
 ```
+## Installation 
+- Open the Chrome browser.
+- Go to chrome://extensions/.
+- Enable "Developer mode" using the toggle switch in the upper right corner.
+- Click the "Load unpacked" button and select the downloaded extension package folder.
+- The extension will be installed in the browser.
 
-Now follow general procedure to open a extension using chrome. [🔗](https://webkul.com/blog/how-to-install-the-unpacked-extension-in-chrome/)
+General procedure to open a extension using chrome. [🔗](https://webkul.com/blog/how-to-install-the-unpacked-extension-in-chrome/)
 
 
